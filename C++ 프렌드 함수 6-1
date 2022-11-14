@@ -1,0 +1,41 @@
+#include<iostream>
+using namespace std;
+ 
+class Matrix{
+    int num[4];
+public:
+    Matrix(){;}
+    Matrix(int a, int b, int c, int d){
+        num[0] = a; num[1] = b; num[2] = c; num[3] = d;
+    };
+    void show();
+    Matrix operator+ (Matrix b);
+    Matrix operator+= (Matrix &b);
+    bool operator== (Matrix b);
+};
+Matrix Matrix::operator+ (Matrix b){
+    Matrix t;
+    for(int i=0; i<4; i++)
+        t.num[i] = this->num[i] + b.num[i];
+    return t;
+}
+Matrix Matrix::operator+= (Matrix &b){
+    for(int i=0; i<4; i++)
+        this->num[i] += b.num[i];
+    return *this;
+}
+bool Matrix::operator== (Matrix c){
+    for(int i=0; i<4; i++){
+        if(this->num[i] == c.num[i]);
+        else 
+            return false;
+    }
+    return true;
+}
+ 
+void Matrix::show(){
+    cout << "Matrix = { ";
+    for(int i=0; i<4; i++){
+        cout << this->num[i] << ' ';
+    }
+    cout << "}" << endl;

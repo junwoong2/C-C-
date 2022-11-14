@@ -1,0 +1,36 @@
+#include<iostream>
+using namespace std;
+ 
+class Book{
+    string title;
+    int price, pages;
+public:
+    Book(string title="", int price=0, int pages=0){
+        this->title = title; this->price = price; this->pages = pages;
+    }
+    void show() {
+        cout << title << " " << price << "원 " << pages << " 페이지" << endl;
+    }
+    string getTitle() {
+        return title;
+    }
+    bool operator== (int a);
+    bool operator== (string a);
+    bool operator== (Book& a);
+};
+ 
+bool Book::operator==(int a){
+    if(price == a) 
+        return true;
+    return false;
+}
+bool Book::operator==(string a){
+    if(title == a) 
+        return true;
+    return false;
+}
+bool Book::operator==(Book& a){
+    if(this->price == a.price && this->title == a.title) 
+        return true;
+    return false;
+}

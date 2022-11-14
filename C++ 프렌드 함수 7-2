@@ -1,0 +1,30 @@
+#include<iostream>
+using namespace std;
+ 
+class Matrix{
+    int arr[4];
+public:
+    Matrix(){;}
+    Matrix(int a, int b, int c, int d) { arr[0]=a; arr[1]=b; arr[2]=c; arr[3]=d; }
+    void show();
+    friend void operator>> (Matrix& a, int x[]);
+    friend void operator<< (Matrix& b, int y[]);
+};
+ 
+void Matrix::show() {
+    cout << "Matrix" << " = { ";
+    for(int i=0; i<4; i++) cout << this->arr[i] << ' ';
+    cout << "}" << endl; 
+}
+ 
+void operator>> (Matrix& a, int x[]){
+    for(int i=0; i<4; i++){
+        x[i] = a.arr[i]; 
+    }
+}
+ 
+void operator<< (Matrix& b, int y[]){
+    for(int i=0; i<4; i++){
+        b.arr[i] = y[i]; 
+    }
+}
