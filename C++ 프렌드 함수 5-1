@@ -1,0 +1,26 @@
+#include<iostream>
+using namespace std;
+ 
+class Color{
+    int red, blue, green;
+public:
+    Color(){;}
+    Color(int a, int b, int c) { red = a; green = b; blue = c; }
+    show() { cout << red << ' ' << green << ' ' << blue << endl; }
+    Color operator+ (Color b);
+    bool operator== (Color a);
+};
+ 
+Color Color::operator+ (Color b){
+    Color a;
+    a.red = this->red + b.red;
+    a.green = this->green + b.green;
+    a.blue = this->blue + b.blue;
+    return a;
+}
+ 
+bool Color::operator== (Color a){
+    if(this->red == a.red && this->blue == a.blue) 
+        return true;
+    return false;
+}
