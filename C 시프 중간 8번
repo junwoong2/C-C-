@@ -1,0 +1,45 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h> //isdigit
+
+
+
+int main() {
+	FILE* fp;
+	char str1[100], arr[10];
+	char* token;
+
+	fp = fopen("a.txt", "r");
+
+
+	if (fp == NULL) {
+		printf("파일 읽기모드 열기에 실패");
+		return -1;
+	}
+
+	while (!feof(fp)) {
+		fgets(str1, 100, fp); //str1에 한 행씩 문자열을 받는다
+		token = strtok(str1, " "); //단어를 찾기 위해 문자열을 자른다.
+		int cnt = 1;
+		while (token != NULL) {
+			arr[0] = token[0]; //단어가 숫자인지 판단
+
+			if (cnt == 1) {
+				printf("%s[lab]", token);
+			}
+			else if (isdigit(arr[0])) { //단어가 숫자로 구성되어있는지 판단
+				printf("%s[num] ", token); 
+			}
+			else if(cnt!=1) {
+				printf("%s[abc] ", token);
+			}
+			cnt++;
+			token = strtok(NULL, " ,. ");
+		}
+	}
+
+	fclose(fp);
+
+	return 0;
+}
