@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+ 
+using namespace std;
+ 
+int main(void) {
+    int n, m;
+    int result = -1;
+    cin >> n >> m;
+    vector<int> *square = new vector<int>[n];
+ 
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            char k;
+            cin >> k;
+            square[i].push_back(k - 48);
+        }
+    }
+ 
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            for (int dx = -i; dx < n - i; dx++) {
+                for (int dy = -j; dy < m - j; dy++) {
+                    int x = i, y = j, cur_num = 0;
+                    
+                    while (!(x < 0 || x >= n || y < 0 || y >= m)) {
+                        cur_num = cur_num * 10 + square[x][y];
+                        
+                        int r = sqrt(cur_num);
+                        if (cur_num == r * r) result = max(result, cur_num);
+                        if (!dx && !dy) break;
+ 
+                        x += dx;
+                        y += dy;
+                    }
+                }
+            }
+        }
+    }
+ 
+    cout << (result != -1 ? result : -1) << endl;
+ 
+    return 0;
+}
+[출처] 백준 1025번 문제, 제곱수 찾기|작성자 열정카페인
+
