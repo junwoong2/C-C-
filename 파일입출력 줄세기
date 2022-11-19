@@ -1,0 +1,28 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+	FILE* fp;
+	fp = fopen("0917_2.txt", "r");
+
+
+	int cnt_w = 0;
+	int cnt_line = 0;
+	char c;
+
+
+	while ((c = fgetc(fp)) != EOF) {
+		if (c == '\n') {
+			cnt_line++;
+		}
+		if (c == ' ' || c == '\n') {
+			cnt_w++;
+		}
+	}
+
+	fclose(fp);
+	printf("Word : %d", cnt_w);
+	printf("\nLine : %d\n", cnt_line);
+}
