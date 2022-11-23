@@ -1,0 +1,79 @@
+MAIN   SEGMENT
+   ASSUME   CS:MAIN,DS:MAIN
+   MOV   AX,CS
+   MOV   DS,AX
+  
+START:   MOV   AH,1
+   INT   21H
+   SUB   AL,30H
+   CMP   AL,0
+    JL   LOOP
+   CMP   AL,9
+   JG   LOOP
+   XCHG   AL,BL
+   MOV   CL,10
+   MUL   CL
+   XCHG   AL,BL
+   ADD   BL,AL
+   JMP   START
+
+
+LOOP:   CMP   SI,10
+   JE   L2
+   CMP   MYDATA[SI],BL
+   JE   L1
+   ADD   SI,1
+   JMP   LOOP   
+
+L1:   MOV   AH,0
+   MOV   AL,BL
+   MOV   BL,10
+   MOV   CL,0
+   JMP   L3
+
+L3:   
+   ADD   DI,1
+   DIV   BL
+   MOV   DL,AH
+   ADD   DL,30H
+   MOV   CL,AL
+   MOV   SPACE[DI],AH
+   MOV   AH,0
+   MOV   AL,CL
+   CMP   AL,9
+   JG   L3
+   CMP   AL,0
+   JE   PRINT
+   ADD   DI,1
+   MOV   SPACE[DI],AL
+   JMP   PRINT
+
+L2:   CMP   DI,9
+   JE   FIN
+   MOV   DL,MSG[DI]
+   ADD   DI,1
+   MOV   AH,2   
+   INT   21H   
+   JMP   L2
+
+
+
+PRINT:   MOV   DL,SPACE[DI]
+   ADD   DL,30H
+   MOV   AH,2
+   INT   21H
+   SUB   DI,1
+   CMP   DI,0
+   JG   PRINT
+
+   JMP   FIN
+
+
+FIN:   MOV   AH,4CH
+   INT   21H
+
+MYDATA   DB   34,12,2,4,5,119,87,88,7,8
+MSG   DB   'NOT FOUND'
+SPACE   DB   4   DUP(0)
+MAIN   ENDS
+   END
