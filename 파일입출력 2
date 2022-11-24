@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+void sort(int x[], int n) {
+
+	int large = 0;
+	int index = 0;
+
+	for (int i = 0;i < n - 1;i++) {
+		large = x[i];
+		for (int j = i + 1;j = n - 1;j++) {
+			if (x[j] > large) {
+				large = x[j];
+				index = j;
+			}
+		}
+		x[index] = x[i];
+		x[i] = large;
+	}
+}
+
+int main() {
+
+	int x[10] = {};
+	int n = 0;
+
+	for (int i = 0;i < 10;i++) {
+		scanf_s("% d", &x[i]);
+	}
+
+	printf("숫자를 입력하시오");
+	scanf_s("%d", &n);
+
+	sort(x, n);
+
+	for (int j = 0;j < 10;j++) {
+		printf("%3d", x[j]);
+	}
+	return 0;
+}
