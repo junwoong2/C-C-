@@ -1,0 +1,205 @@
+
+#include <Windows.h>
+#include <tchar.h>
+#include "resource.h"
+
+#define lengthMAX 256
+
+LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, 
+         WPARAM wParam, LPARAM lParam);
+
+LPCTSTR lpszClass = TEXT("메모장");         
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, //WINAPI : 윈도우 프로그램이라는 의미
+         LPSTR lpszCmdLine, int nCmdShow)                   //hInstance : 운영체제의 커널이 응용 프로그램에 부여한 ID
+{                                                 //szCmdLine : 커멘트라인 상에서 프로그램 구동 시 전달된 문자열
+   HWND   hwnd;                                     //iCmdShow : 윈도우가 화면에 출력될 형태
+   MSG      msg;
+
+   WNDCLASS WndClass;                                        //WndClass 라는 구조체 정의                            
+   WndClass.style         = CS_SAVEBITS;                         //출력스타일 : 수직/수평의 변화시 다시 그림
+   WndClass.lpfnWndProc   = WndProc;                            //프로시저 함수명   
+   WndClass.cbClsExtra      = 0;                               //O/S 사용 여분 메모리 (Class)
+   WndClass.cbWndExtra      = 0;                               //O/s 사용 여분 메모리 (Window)
+   WndClass.hInstance      = hInstance;                         //응용 프로그램 ID
+   WndClass.hIcon         = LoadIcon(NULL, IDI_APPLICATION);          //아이콘 유형
+   WndClass.hCursor      = LoadCursor(NULL, IDC_ARROW);             //커서 유형
+   WndClass.hbrBackground   = (HBRUSH)GetStockObject(WHITE_BRUSH);          //배경색   
+   WndClass.lpszMenuName   = MAKEINTRESOURCE(IDR_MENU1);             //메뉴 이름
+   WndClass.lpszClassName   = lpszClass;                         //클래스 이름
+   
+   RegisterClass(&WndClass);      //앞서 정의한 윈도우 클래스의 주소 (윈도우 클래스를 커널에 등록시킴)
+
+   hwnd = CreateWindow(lpszClass,                         //윈도우가 생성되면 핸들(hwnd)이 반환 (윈도우 생성)
+      lpszClass,                                     //윈도우 클래스, 타이틀 이름
+      WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_HSCROLL,                            //윈도우 스타일
+      CW_USEDEFAULT,                                  //윈도우 위치, x좌표
+      CW_USEDEFAULT,                                  //윈도우 위치, y좌표
+      CW_USEDEFAULT,                                  //윈도우 폭   
+      CW_USEDEFAULT,                                  //윈도우 높이   
+      NULL,                                        //부모 윈도우 핸들    
+      NULL,                                        //메뉴 핸들
+      hInstance,                                      //응용 프로그램 ID
+      NULL                                          //생성된 윈도우 정보
+      );
+
+   ShowWindow(hwnd, nCmdShow);                            // (윈도우 정보 전달 및 윈도우 출력)
+
+
+   while(GetMessage(&msg, NULL, 0, 0))                      //WinProc()에서 PostQuitMessage() 호출 때까지 처리 (윈도우 메시지 루프)
+   {                                              // 
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);                            //WinMain -> WinProc  
+   }
+   return (int)msg.wParam;
+}
+   int xPoss, yPoss;
+void CALLBACK TimerProc(HWND hwnd, UINT msg, UINT idEvent, DWORD dwTime)
+{
+
+   HDC hdc;
+   static RECT rect;
+
+   hdc = GetDC(hwnd);
+   
+   xPoss = rand() % 550;
+
+   yPoss = rand() % 550;
+   TextOut(hdc, xPoss, yPoss, TEXT("H"), 1);
+   
+   ReleaseDC(hwnd, hdc);
+   //InvalidateRect(hwnd, NULL, TRUE);
+}
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    static int xPos, yPos;
+    static RECT rect;
+    static HFONT hFont;
+   static int num = 0;
+   static bool check;
+   static bool click;
+    static COLORREF textColor = RGB(0, 0, 0);
+
+    switch (msg) {
+    case WM_CREATE:
+      SetTimer(hwnd, 1, 2000, TimerProc);  
+      //SetTimer(hwnd, 4, 10, TimerProc); 
+      check = FALSE;
+      click = FALSE;
+      //SetTimer(hwnd, 3, 5000, NULL);
+      //SetTimer(hwnd, 4, 5000, NULL);
+        //srand(time(NULL));
+        GetClientRect(hwnd, &rect);
+        break;
+
+   case WM_TIMER:
+      //if(wParam == 1){
+      //   
+      //   if(x == 0){
+      //      x_check = TRUE;
+      //   }
+      //   else if(x ==580){
+      //      x_check = FALSE;
+      //   }
+      //   if( x_check == TRUE){
+      //      x += 1;
+      //   }
+      //   if(x_check == FALSE){
+      //      x -= 1;
+      //   }
+      //}
+      //   
+      //if(wParam == 2){
+      //   
+      //   if(y == 0){
+      //      y_check = TRUE;
+      //   }
+      //   else if(y ==550){
+      //      y_check = FALSE;
+      //   }
+      //   if( y_check == TRUE){
+      //      y += 1;
+      //   }
+      //   if(y_check == FALSE){
+      //      y -= 1;
+      //   }
+      //}
+      /*if(wParam == 3){
+         xPos = rand() % (rect.right - rect.left - 50);
+         yPos = rand() % (rect.bottom - rect.top - 50);
+      }*/
+      if(wParam == 4){
+         check = FALSE;
+      }
+      InvalidateRect(hwnd, NULL, TRUE);
+      break;
+    case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+         TCHAR word[10000];
+         
+            HDC hdc = BeginPaint(hwnd, &ps);
+
+            // Generate random position for the text
+            //xPos = rand() % (rect.right - rect.left - 50);
+            //yPos = rand() % (rect.bottom - rect.top - 50);
+         HBRUSH myBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
+         HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, myBrush);
+            // Draw the text
+            HFONT hOldFont = (HFONT)SelectObject(hdc, hFont);
+            SetTextColor(hdc, textColor);
+            //TextOut(hdc, xPos, yPos, TEXT("h"), 1);
+            SelectObject(hdc, hOldFont);
+         TextOut(hdc, 550, 550, TEXT("FAIL"), 4);
+         if(click == TRUE){
+            Rectangle(hdc, xPoss-50, yPoss-50, xPoss+50, yPoss+50);
+         }
+         if(check == TRUE){
+            TextOut(hdc, 550, 550, TEXT("success"), 7);
+         }
+         SelectObject(hdc, oldBrush);
+         DeleteObject(myBrush);
+         //wsprintfW(word, L"숫자 : %d", num);
+         //TextOutW(hdc, 550, 550, word, lstrlen(word));
+            EndPaint(hwnd, &ps);
+        }
+        break;
+
+    case WM_LBUTTONDOWN:
+        {
+            // Get the position of the mouse cursor
+            int x = LOWORD(lParam);
+            int y = HIWORD(lParam);
+         click = TRUE;
+            // Check if the mouse is within the bounds of the text
+            if (x >= xPoss && x <= xPoss + 50 && y >= yPoss && y <= yPoss + 50) {
+                // Change the color of the text to red
+                textColor = RGB(255, 0, 0);
+            
+                InvalidateRect(hwnd, NULL, TRUE);
+            num++;
+            check = TRUE;
+
+            }
+         else
+            check=FALSE;
+        }
+        break;
+   case WM_LBUTTONUP:
+        {
+         click = FALSE;
+         textColor = RGB(0,0,0);
+         InvalidateRect(hwnd, NULL, TRUE);
+        }
+        break;
+
+    case WM_DESTROY:
+        DeleteObject(hFont);
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
+
+    return 0;
+}
