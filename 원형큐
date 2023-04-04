@@ -61,7 +61,7 @@ void add(int* Q_S, int** ar) {
 
 void enqueue(int item)
 {
-	
+	wht++;
 	if (isFull()) {
 		
 		
@@ -91,14 +91,14 @@ void enqueue(int item)
 			
 			rear = (rear + 1);
 			queue[++rear] = item;
-			printf("\nrear : %d\n", rear);
+			
 		}
 		else {
 			add(&Q_S, &temp);
 			
 
-			for (int i = 1; i < QUEUE_SIZE + Q_S; i++) {
-				if (num != QUEUE_SIZE + Q_S ) {
+			for (int i = 1; i < wht; i++) {
+				if (num != wht-1 ) {
 					temp[i] = queue[num++];
 				
 				}
@@ -111,24 +111,24 @@ void enqueue(int item)
 			Q_S += 5;
 			add(&Q_S, &queue);
 			
-			for (int i = 1; i < QUEUE_SIZE + Q_S; i++) {
+			for (int i = 1; i < wht-1; i++) {
 				queue[i] = temp[i];
 			}
 			
 			front = 0;
-			rear = 8 + Q_S - 5;
+			rear = wht-3;
 			rear = (rear + 1);
 			queue[++rear] = item;
-			printf("\nrear : %d\n", rear);
+			
 		}
 	}
 	else {
 		
 		
 		queue[++rear] = item;
-		printf("rear : %d\n", rear);
+		
 	}
-	printf("\ Q_S : %d\n", Q_S);
+	
 }
 
 // 큐가 포화 상태인지 확인하는 연산
@@ -162,10 +162,10 @@ void dequeue() {
 	else
 	{
 
-		front = (front + 1) % (QUEUE_SIZE + Q_S);
-		int num = front;
-		for (int i = 1; i < QUEUE_SIZE + Q_S-1; i++) {
-			if (num != QUEUE_SIZE + Q_S) {
+		front = (front + 1);
+		int num = front+1;
+		for (int i = 1; i < wht; i++) {
+			if (num != wht+1) {
 				temp[i] = queue[num++];
 
 			}
@@ -173,16 +173,13 @@ void dequeue() {
 				num = 1;
 				i--;
 			}
-
 		}
 		front = 0;
-		
-		for (int i = 1; i < QUEUE_SIZE + Q_S; i++) {
+		rear = wht-1;
+		for (int i = 1; i < wht; i++) {
 			queue[i] = temp[i];
 		}
-		printf("\n queue [%d] : ", QUEUE_SIZE + Q_S);
-		for (int i = 0; i < QUEUE_SIZE + Q_S; i++) printf(" %d ", queue[i]);
-		printf("\n");
+		
 	}
 }
 
@@ -202,22 +199,17 @@ int main(void) {
 	int i;
 
 
-	for (i = 0; i <7 ; i++) enqueue(i);
+	for (i = 0; i <15 ; i++) enqueue(i);
 	printQueue();
 	
-	front = 5;
-	rear = 4;
-
-	
-	printf("dequeue : \n");
+	printf("\n---------------------------dequeue------------------------- \n ");
 	dequeue();
 	printQueue();
-
-	printf("\n temp [%d] : ", QUEUE_SIZE + Q_S);
-	for (i = 0; i < QUEUE_SIZE + Q_S; i++) printf(" %d ", temp[i]);
 	printf("\n");
 	
-	
+	front = 6;
+	rear = 5;
+
 	enqueue(13);
 	printQueue();
 
@@ -232,13 +224,6 @@ int main(void) {
 	*/
 	
 
-	
-
-	printf("\n temp [%d] : ", QUEUE_SIZE+Q_S);
-	for (i = 0; i < QUEUE_SIZE + Q_S; i++) printf(" %d ", temp[i]);
-
-	printf("\n%d, %d", front, rear);
-	printf("\n Q_S : %d", Q_S);
 
 	free(temp);
 	free(queue);
